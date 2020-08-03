@@ -80,10 +80,6 @@ async def test_update_data(
         ids:List[int], true_res: List[Dict[str, Any]]
     ):
     table_name = 'test_update_data'
-    try:
-        await conn.fetch(f'DROP TABLE {table_name}')
-    except:
-        pass
     await conn.fetch(f'''
         CREATE TABLE {table_name} (
             id INT PRIMARY KEY NOT NULL,
