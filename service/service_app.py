@@ -12,24 +12,15 @@ class Response:
         self.is_ok = is_ok
         self.data = data
 
-    def response(self):
-        if not self.is_ok:
-            return web.Response(text=json.dumps({'status': 'error'}))
-        else:
-            return web.Response(text=json.dumps({
-                'status': 'ok',
-                'body': self.data
-            }))
-
-    def response_xml(self):
-        if not self.is_ok:
-            return web.Response(text=str(dicttoxml({'status': 'error'})))
-        else:
-            return web.Response(text=str(dicttoxml({
-                'status': 'ok',
-                'body': self.data
-            })))
-    
+    def response(self, format='json'):
+        assert format in ('json', 'xml')
+        resp = {
+            'status': 'ok' if self.is_ok else 'error',
+            'body': self.data
+        }
+        return web.Response(
+            text=json.dumps(resp) if format == 'json' else str(dicttoxml(resp))
+        )
 
 
 class ServiceApp:
@@ -66,8 +57,4 @@ class ServiceApp:
         format = request.match_info['format']
         id = int(request.match_info['id'])
         item = await self.db.get_item(table_name, id)
-        if format == 'json':
-            return Response(True, item).response()
-        if format == 'xml':
-            return Response(True, item).response_xml()
-        return Response(False).response()
+        return Response(True, item).response(format=format)
