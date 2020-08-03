@@ -5,20 +5,6 @@ import pytest
 from pg_db.database import PgDB
 
 
-@pytest.fixture
-async def pgdb(loop):
-    user = 'user'
-    password = 'password'
-    database = 'database'
-    host = '127.0.0.1'
-    port = 5432
-    database = await PgDB.create_PgDB(user=user,
-            password=password,
-            database=database,
-            host=host,
-            port=port)
-    return database
-
 @pytest.yield_fixture
 async def conn(loop):
     user = 'user'
@@ -30,3 +16,8 @@ async def conn(loop):
                                  database=database, host=host, port=port)
     yield conn
     await conn.close()
+
+
+@pytest.fixture
+async def pgdb(conn):
+    return PgDB(conn)
