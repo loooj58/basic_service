@@ -1,0 +1,10 @@
+.vscode/
+service/tests/__pycache__/
+service/tests/.pytest_cache/
+pg_db/tests/__pycache__/
+pg_db/tests/.pytest_cache/
+testenv/
+.DS_Store
+service/__pycache__/
+pg_db/__pycache__/
+__pycache__/
